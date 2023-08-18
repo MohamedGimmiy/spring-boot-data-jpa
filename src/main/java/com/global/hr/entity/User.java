@@ -3,6 +3,8 @@ package com.global.hr.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -34,6 +36,7 @@ public class User {
 	private Set<Role>roles = new HashSet<Role>();
 	
 	@OneToOne(mappedBy = "user",fetch = FetchType.LAZY)
+	@JsonIgnore
 	private Employee employee;
 	
 	

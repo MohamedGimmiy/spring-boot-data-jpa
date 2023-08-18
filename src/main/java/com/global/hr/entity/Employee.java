@@ -7,17 +7,31 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityResult;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.FieldResult;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedNativeQuery;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.SqlResultSetMapping;
 
 @Entity
-@NamedQuery(name = "Employee.findBySalary",query = "select emp from Employee emp where emp.salary >= :salary")
+@NamedQuery(name = "Employee.findBySalary",query = "select emp from Employee emp where emp.salary >= :salary and emp.name like :name")
+
+@SqlResultSetMapping(name = "empMapping", entities = @EntityResult(
+		entityClass = Employee.class,
+		fields = {
+				@FieldResult(name = "id", column = "id"),
+				@FieldResult(name = "name", column = "name"),
+				@FieldResult(name = "salary", column = "salary"),
+		}))
+@NamedNativeQuery(name = "Employee.findByDepartmentt", 
+query = "select * from employee where department_id = :deptId", resultSetMapping = "empMapping")
 public class Employee {
 
 	@Id
@@ -36,7 +50,6 @@ public class Employee {
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id")
-	@JsonIgnore
 	private User user;
 	
 	

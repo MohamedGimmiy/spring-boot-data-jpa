@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.global.hr.HrStatisticsProjection;
 import com.global.hr.Reposatories.EmployeeRepo;
 import com.global.hr.entity.Employee;
 
@@ -17,12 +18,15 @@ public class EmployeeService {
 	@Autowired
 	private DepartmentService departmentService;
 	
+	@Autowired
+	private UserService userService;
+	
 	public Employee findById(Long id) {
 		return employeeRepo.findById(id).orElseThrow();
 	}
 	
-	public List<Employee> findBySalary(Double salary){
-		return employeeRepo.findBySalary(salary);
+	public List<Employee> findBySalary(Double salary, String name){
+		return employeeRepo.findBySalary(salary, name);
 	}
 
 	
@@ -35,6 +39,10 @@ public class EmployeeService {
 		
 		if(emp.getDepartment() != null && emp.getDepartment().getId() != null) {
 			emp.setDepartment(departmentService.findById(emp.getDepartment().getId()));
+		}
+		
+		if(emp.getUser() != null && emp.getUser().getId() != null) {
+			emp.setUser(userService.findById(emp.getUser().getId()));
 		}
 		
 		return employeeRepo.save(emp);
@@ -51,10 +59,19 @@ public class EmployeeService {
 	public List<Employee> findByDepartmentId(Long id){
 		return employeeRepo.findByDepartmentId(id);
 	}
+	
+	public List<Employee> findByDepartment(Long id){
+		return employeeRepo.findByDepartmentt(id);
+	}
 
 	
 	public List<Employee> findAll(){
 		return employeeRepo.findAll();
+	}
+	
+	public HrStatisticsProjection getHrStatistics() {
+		
+		return employeeRepo.getHrStatistics();
 	}
 	
 }
