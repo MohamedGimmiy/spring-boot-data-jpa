@@ -9,6 +9,6 @@ import com.global.hr.entity.Role;
 @Repository
 public interface RoleRepo extends JpaRepository<Role, Long> {
 	
-	
+	Role findByName(String name);
 	
 }

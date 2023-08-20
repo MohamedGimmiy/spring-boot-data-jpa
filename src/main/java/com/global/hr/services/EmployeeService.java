@@ -3,11 +3,17 @@ package com.global.hr.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.global.hr.HrStatisticsProjection;
 import com.global.hr.Reposatories.EmployeeRepo;
 import com.global.hr.entity.Employee;
+import com.global.hr.projection.EmployeeProjection;
 
 @Service
 public class EmployeeService {
@@ -65,6 +71,17 @@ public class EmployeeService {
 	}
 
 	
+	public Page<Employee> findByDepartmentandSorting(int pageNum, int pageSize, boolean isAsc){
+		Pageable page = PageRequest.of(pageNum, pageSize,Sort.by(isAsc? Direction.ASC:Direction.DESC,"name"));
+		
+		return employeeRepo.findByDepartments(page);
+	}
+	
+	public Page<Employee> findEmployees(int pageNum, int pageSize, boolean isAsc, String name){
+		Pageable page = PageRequest.of(pageNum, pageSize,Sort.by(isAsc? Direction.ASC:Direction.DESC,"name"));
+		
+		return employeeRepo.findEmployees(page, name);
+	}	
 	public List<Employee> findAll(){
 		return employeeRepo.findAll();
 	}

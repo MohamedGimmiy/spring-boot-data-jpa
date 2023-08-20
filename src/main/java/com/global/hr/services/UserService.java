@@ -6,13 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.global.hr.Reposatories.UserRepo;
+import com.global.hr.entity.Role;
 import com.global.hr.entity.User;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class UserService {
 	
 	@Autowired
 	private UserRepo userRepo;
+	
+	@Autowired
+	private RoleService roleService;
 	
 	public User findById(Long id) {
 		return userRepo.findById(id).orElseThrow();
@@ -35,4 +41,15 @@ public class UserService {
 		return userRepo.findAll();
 	}
 	
+	@Transactional
+	public void addRoleForAllUsers(String roleName) {
+		// start transaction
+		Role role = roleService.findByName(roleName);
+		
+		findAll().forEach(user -> {
+			user.addRole(role);
+			userRepo.save(user);
+		});
+		// end transaction
+	}
 }

@@ -40,6 +40,10 @@ public class User {
 	private Employee employee;
 	
 	
+	
+	public void addRole(Role role) {
+		roles.add(role);
+	}
 	public Set<Role> getRoles() {
 		return roles;
 	}

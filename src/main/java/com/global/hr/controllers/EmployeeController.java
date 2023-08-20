@@ -4,6 +4,8 @@ package com.global.hr.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.global.hr.HrStatisticsProjection;
 import com.global.hr.entity.Employee;
 import com.global.hr.entity.EmployeeResponse;
+import com.global.hr.projection.EmployeeProjection;
 import com.global.hr.services.EmployeeService;
 
 @RestController
@@ -80,6 +83,26 @@ public class EmployeeController {
 	public ResponseEntity<?> getHrStatistics() {
 		
 		return new ResponseEntity<HrStatisticsProjection>(employeeService.getHrStatistics(),HttpStatus.OK) ;
+	}
+	
+	@GetMapping("/projection")
+	public ResponseEntity<?> findEmployees(
+			@RequestParam int pageNum, 
+			@RequestParam int pageSize,
+			@RequestParam boolean isAsc,
+			@RequestParam String name){
+		return new ResponseEntity<Page<Employee>> (employeeService.findEmployees(pageNum, pageSize,isAsc,name),
+				HttpStatus.OK);
+	}
+	
+	
+	@GetMapping("/sorting")
+	public ResponseEntity<?> findByDepartmentandSorting(
+			@RequestParam int pageNum, 
+			@RequestParam int pageSize,
+			@RequestParam boolean isAsc){
+		return new ResponseEntity<Page<Employee>> (employeeService.findByDepartmentandSorting(pageNum, pageSize,isAsc),
+				HttpStatus.OK);
 	}
 }
 

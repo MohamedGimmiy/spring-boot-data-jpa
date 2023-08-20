@@ -28,8 +28,10 @@ public class RoleService {
 		return roleRepo.save(current);
 	}
 	
+	public Role findByName(String name) {
+		return roleRepo.findByName(name);
+	}
 
-	
 	public List<Role> findAll(){
 		return roleRepo.findAll();
 	}
